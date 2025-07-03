@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
+from collections import defaultdict
+
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client['garden_planner_project']
@@ -117,10 +119,16 @@ def handle_login():
         modal_button_text=modal_button_text
     )
 
-# Route for main page
 @app.route('/mainpage', methods=['GET'])
 def mainpage():
-    return render_template('main_page.html')
+    plants = list(db['plants'].find({}))
+
+    # Group by plant 'type'
+    grouped_plants = defaultdict(list)
+    for plant in plants:
+        grouped_plants[plant['type']].append(plant)
+
+    return render_template('main_page.html', grouped_plants=grouped_plants)
 
 @app.route('/userdetails')
 def userdetails():
@@ -157,6 +165,29 @@ def search():
 
     # Pass the results back to the main page
     return render_template('main_page.html', plants=plants, search_results=search_results)
+
+@app.route('/filter', methods=['GET'])
+def filter_plants():
+    plant_type = request.args.get('type')
+    light = request.args.get('light')
+
+    filter_query = {}
+    if plant_type:
+        filter_query['type'] = plant_type
+    if light:
+        filter_query['light'] = light
+
+    filtered_plants = list(db['plants'].find(filter_query))
+
+    return render_template('main_page.html', filtered_plants=filtered_plants)
+
+@app.route('/plant/<plant_name>')
+def plant_detail(plant_name):
+    try:
+        return render_template(f"{plant_name}.html")
+    except:
+        return "Plant page not found", 404
+
 
 plants = [
     {'name': 'Apples', 'category': 'Fruits', 'image': 'Apple.webp'},

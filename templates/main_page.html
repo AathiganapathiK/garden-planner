@@ -382,7 +382,42 @@
                     <a class="dropdown-item" href="#" id="sortByCategory">Sort by Category</a>
                 </div>
             </div>
-        </div>        
+            <!-- 🌿 Filter Dropdown (New) -->
+            <div class="dropdown" style="display: inline-block; margin-left: 10px;">
+                <button class="sort-button dropdown-toggle" type="button" id="filterDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Filter
+                </button>
+                <div class="dropdown-menu p-3" aria-labelledby="filterDropdown" style="min-width: 220px;">
+                    <form action="{{ url_for('filter_plants') }}" method="GET">
+                        <label for="type">Plant Type</label>
+                        <select name="type" class="form-control mb-2">
+                            <option value="">All</option>
+                            <option value="Alliums">Alliums</option>
+                            <option value="Cole Crops">Cole Crops</option>
+                            <option value="Flowers">Flowers</option>
+                            <option value="Fruits">Fruits</option>
+                            <option value="Greens">Greens</option>
+                            <option value="Herbs">Herbs</option>
+                            <option value="Legumes">Legumes</option>
+                            <option value="Melons/Squashes">Melons/Squashes</option>
+                            <option value="Nightshades">Nightshades</option>
+                            <option value="Other Vegetables">Other Vegetables</option>
+                            <option value="Roots">Roots</option>
+                        </select>
+
+                        <label for="light">Light</label>
+                        <select name="light" class="form-control mb-2">
+                            <option value="">Any</option>
+                            <option value="Full Sun">Full Sun</option>
+                            <option value="Partial Shade">Partial Shade</option>
+                            <option value="Shade">Shade</option>
+                        </select>
+
+                        <button type="submit" class="btn btn-success btn-sm btn-block">Apply</button>
+                    </form>
+                </div>
+            </div>
+        </div>       
         
         <div class="ml-auto">
             <a href="{{ url_for('userdetails')}}">
@@ -395,330 +430,52 @@
             <h1>Welcome to Sproutify</h1>
             <p>Find the perfect plants for your garden!</p>
         </section>
-        <div class="category" id="alliums">
-            <h2>Alliums</h2>
+        <!-- 🌿 Show Filtered Plants (if any) -->
+        {% if filtered_plants %}
+        <div class="category" id="filtered-plants">
+            <h2>Filtered Plants</h2>
             <div class="category-section">
+                <a href="{{ url_for('mainpage') }}" class="btn btn-outline-secondary btn-sm" style="margin: 10px;">Clear Filter</a>
                 <div class="grid-container">
+                    
+                    {% for plant in filtered_plants %}
                     <div class="grid-item">
-                        <a href="{{ url_for('garlic')}}">
-                            <img src="{{ url_for('static', filename='images/Garlic.jpg') }}" alt="Garlic">
-                            <p>Garlic</p>
+                        <a href="{{ url_for('plant_detail', plant_name=plant.name|lower) }}">
+                            <img src="{{ plant.image_url }}" alt="{{ plant.name }}">
+                            <p>{{ plant.name }}</p>
                         </a>
+                        
                     </div>
-                    <div class="grid-item">
-                        <a href="{{ url_for('onions')}}">
-                            <img src="{{ url_for('static', filename='images/Onions.jpg') }}"  alt="Onions">
-                            <p>Onions</p>
-                        </a>
-                    </div>
+                     
+                    {% endfor %}
                 </div>
             </div>
+            
         </div>
-    </div>
-    <div class="category" id="colecrops">
-        <h2>Cole Crops</h2>
-        <div class="category-section">
-            <div class="grid-container">
-                <div class="grid-item">
-                    <a href="{{ url_for('broccoli')}}">
-                        <img src="{{ url_for('static', filename='images/Broccoli.jpg') }}" alt="Broccoli">
-                        <p>Broccoli</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('cabbage')}}">
-                        <img src="{{ url_for('static', filename='images/Cabbage.jpg') }}" alt="Cabbage">
-                        <p>Cabbage</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('cauliflower')}}">
-                        <img src="{{ url_for('static', filename='images/Cauliflower.jpg') }}"  alt="Cauliflower">
-                        <p>Cauliflower</p>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="category" id="flowers">
-        <h2>Flowers</h2>
-        <div class="category-section">
-            <div class="grid-container">
-                <div class="grid-item">
-                    <a href="{{ url_for('cosmos')}}">
-                        <img src="{{ url_for('static', filename='images/Cosmos.jpg') }}"  alt="Cosmos">
-                        <p>Cosmos</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('daffodils')}}">
-                        <img src="{{ url_for('static', filename='images/Daffodils.jpg') }}"  alt="Daffodils">
-                        <p>Daffodils</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('lavender')}}">
-                        <img src="{{ url_for('static', filename='images/Lavender.jpg') }}"  alt="Lavender">
-                        <p>Lavender</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('lilies')}}">
-                        <img src="{{ url_for('static', filename='images/Lilies.jpg') }}"  alt="Lilies">
-                        <p>Lilies</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('marigold')}}">
-                        <img src="{{ url_for('static', filename='images/Marigold.jpg') }}"  alt="Marigold">
-                        <p>Marigold</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('rose')}}">
-                        <img src="{{ url_for('static', filename='images/Rose.jpg') }}"  alt="Rose">
-                        <p>Rose</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('sunflower')}}">
-                        <img src="{{ url_for('static', filename='images/Sunflower.jpg') }}"  alt="Sunflower">
-                        <p>Sunflower</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('tulip')}}">
-                        <img src="{{ url_for('static', filename='images/Tulips.jpg') }}"  alt="Tulips">
-                        <p>Tulips</p>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="category" id="fruits">
-        <h2>Fruits</h2>
-        <div class="category-section">
-            <div class="grid-container">
-                <div class="grid-item">
-                    <a href="{{ url_for('apple')}}">
-                        <img src="{{ url_for('static', filename='images/Apple.webp') }}" alt="Apples">
-                        <p>Apples</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('blueberries')}}">
-                        <img src="{{ url_for('static', filename='images/Blueberries.jpg') }}" alt="Blueberries">
-                        <p>Blueberries</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('grapes')}}">
-                        <img src="{{ url_for('static', filename='images/Grapes.jpg') }}"  alt="Grapes">
-                        <p>Grapes</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('orange')}}">
-                        <img src="{{ url_for('static', filename='images/Orange.jpg') }}"  alt="Oranges">
-                        <p>Oranges</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('strawberries')}}">
-                        <img src="{{ url_for('static', filename='images/Strawberry.jpeg') }}"  alt="Strawberries">
-                        <p>Strawberries</p>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+        
+        {% endif %}
 
-    <div class="category" id="greens">
-        <h2>Greens</h2>
-        <div class="category-section">
-            <div class="grid-container">
-                <div class="grid-item">
-                    <a href="{{ url_for('lettuce')}}">
-                        <img src="{{ url_for('static', filename='images/Lettuce.jpg') }}"  alt="Lettuce">
-                        <p>Lettuce</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('spinach')}}">
-                        <img src="{{ url_for('static', filename='images/Spinach.jpg') }}"  alt="Spinach">
-                        <p>Spinach</p>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="category" id="herbs">
-        <h2>Herbs</h2>
-        <div class="category-section">
-            <div class="grid-container">
-                <div class="grid-item">
-                    <a href="{{ url_for('basil')}}">
-                        <img src="{{ url_for('static', filename='images/Basil.jpg') }}"  alt="Basil">
-                        <p>Basil</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('ginger')}}">
-                        <img src="{{ url_for('static', filename='images/Ginger.jpg') }}" alt="Ginger">
-                        <p>Ginger</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('mint')}}">
-                        <img src="{{ url_for('static', filename='images/Mint.jpg') }}"  alt="Mint">
-                        <p>Mint</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('mustard')}}">
-                        <img src="{{ url_for('static', filename='images/Mustard.jpg') }}"  alt="Mustard">
-                        <p>Mustard</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('parsley')}}">
-                        <img src="{{ url_for('static', filename='images/Parsley.jpg') }}"  alt="Parsley">
-                        <p>Parsley</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('rosemary')}}">
-                        <img src="{{ url_for('static', filename='images/Rosemary.jpg') }}"  alt="Rosemary">
-                        <p>Rosemary</p>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="category" id="legumes">
-    <h2>Legumes</h2>
-        <div class="category-section">
-            <div class="grid-container">
-                <div class="grid-item">
-                    <a href="{{ url_for('beans')}}">
-                        <img src="{{ url_for('static', filename='images/Beans.jpg') }}" alt="Beans">
-                        <p>Beans</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('peanut')}}">
-                        <img src="{{ url_for('static', filename='images/Peanuts.jpg') }}" alt="Peanuts">
-                        <p>Peanuts</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('peas')}}">
-                        <img src="{{ url_for('static', filename='images/Peas.jpg') }}"  alt="Peas">
-                        <p>Peas</p>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="category" id="melons/squashes">
-        <h2>Melons/Squashes</h2>
-            <div class="category-section">
-                <div class="grid-container">
-                    <div class="grid-item">
-                        <a href="{{ url_for('cucumber')}}">
-                            <img src="{{ url_for('static', filename='images/Cucumber.jpg') }}" alt="Cucumber">
-                            <p>Cucumber</p>
-                        </a>
-                    </div>
-                    <div class="grid-item">
-                        <a href="{{ url_for('pumpkin')}}">
-                            <img src="{{ url_for('static', filename='images/Pumpkin.jpg') }}"  alt="Pumpkin">
-                            <p>Pumpkin</p>
-                        </a>
-                    </div>
-                    <div class="grid-item">
-                        <a href="{{ url_for('watermelon')}}">
-                            <img src="{{ url_for('static', filename='images/Watermelon.jpg') }}"  alt="Watermelon">
-                            <p>Watermelon</p>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <div class="category" id="nightshades">
-            <h2>Nightshades</h2>
+        <!-- 🌿 Default: Show Grouped Category-wise Plants -->
+        {% if not filtered_plants %}
+            {% for category, items in grouped_plants.items() %}
+            <div class="category" id="{{ category|lower|replace(' ', '_') }}">
+                <h2>{{ category }}</h2>
                 <div class="category-section">
                     <div class="grid-container">
+                        {% for plant in items %}
                         <div class="grid-item">
-                            <a href="{{ url_for('bellpepper')}}">
-                                <img src="{{ url_for('static', filename='images/BellPepper.jpg') }}" alt="Bell Pepper">
-                                <p>Bell Pepper</p>
+                            <a href="{{ url_for('plant_detail', plant_name=plant.name|lower) }}">
+                                <img src="{{ plant.image_url }}" alt="{{ plant.name }}">
+                                <p>{{ plant.name }}</p>
                             </a>
                         </div>
-                        <div class="grid-item">
-                            <a href="{{ url_for('tomatoes')}}">
-                                <img src="{{ url_for('static', filename='images/Tomatoes.jpg') }}"  alt="Tomatoes">
-                                <p>Tomatoes</p>
-                            </a>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
+            {% endfor %}
+        {% endif %}
 
-            <div class="category" id="other">
-                <h2>Other Vegetables</h2>
-                    <div class="category-section">
-                        <div class="grid-container">
-                            <div class="grid-item">
-                                <a href="{{ url_for('asparagus')}}">
-                                    <img src="{{ url_for('static', filename='images/Asparagus.jpg') }}" alt="Asparagus">
-                                    <p>Asparagus</p>
-                                </a>
-                            </div>
-                            <div class="grid-item">
-                                <a href="{{ url_for('corn')}}">
-                                    <img src="{{ url_for('static', filename='images/Corn.jpg') }}" alt="Corn">
-                                    <p>Corn</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-    <div class="category" id="roots">
-        <h2>Roots</h2>
-        <div class="category-section">
-            <div class="grid-container">
-                <div class="grid-item">
-                    <a href="{{ url_for('beetroot')}}">
-                        <img src="{{ url_for('static', filename='images/Beetroot.jpg') }}"  alt="Beetroot">
-                        <p>Beetroot</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('carrots')}}">
-                        <img src="{{ url_for('static', filename='images/Carrot.jpg') }}"  alt="Carrots">
-                        <p>Carrots</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('potatoes')}}">
-                        <img src="{{ url_for('static', filename='images/Potato.jpg') }}"  alt="Potatoes">
-                        <p>Potatoes</p>
-                    </a>
-                </div>
-                <div class="grid-item">
-                    <a href="{{ url_for('radish')}}">
-                        <img src="{{ url_for('static', filename='images/Radish.jpg') }}"  alt="Radish">
-                        <p>Radish</p>
-                    </a>
-                </div>
-            </div>
-        </div>
     </div>
    
     <div class="centered-result-container"></div>
