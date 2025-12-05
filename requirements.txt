@@ -4,3 +4,4 @@ flask
 pymongo
 numpy
 scikit-learn
+requests
